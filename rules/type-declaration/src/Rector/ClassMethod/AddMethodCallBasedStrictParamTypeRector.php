@@ -7,12 +7,15 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\NodeTypeResolver\PHPStan\TypeComparator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -28,9 +31,15 @@ final class AddMethodCallBasedStrictParamTypeRector extends AbstractRector
      */
     private $typeFactory;
 
-    public function __construct(TypeFactory $typeFactory)
+    /**
+     * @var TypeComparator
+     */
+    private $typeComparator;
+
+    public function __construct(TypeFactory $typeFactory, TypeComparator $typeComparator)
     {
         $this->typeFactory = $typeFactory;
+        $this->typeComparator = $typeComparator;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -118,19 +127,48 @@ CODE_SAMPLE
     }
 
     /**
-     * @param MethodCall[]|StaticCall[]|ArrayCallable[] $classMethodCalls
+     * @param MethodCall[]|StaticCall[]|ArrayCallable[] $calls
      * @return Type[]
      */
-    private function getCallTypesByPosition(array $classMethodCalls): array
+    private function getCallTypesByPosition(array $calls): array
     {
         $staticTypesByArgumentPosition = [];
-        foreach ($classMethodCalls as $classMethodCall) {
-            if (! $classMethodCall instanceof StaticCall && ! $classMethodCall instanceof MethodCall) {
+        foreach ($calls as $call) {
+            if (! $call instanceof StaticCall && ! $call instanceof MethodCall) {
                 continue;
             }
 
-            foreach ($classMethodCall->args as $position => $arg) {
-                $staticTypesByArgumentPosition[$position][] = $this->getStaticType($arg->value);
+            foreach ($call->args as $position => $arg) {
+                $argValueType = $this->getStaticType($arg->value);
+
+                // 1. is defined in param?
+                $classMethod = $arg->getAttribute(AttributeKey::METHOD_NODE);
+                if ($arg->value instanceof Variable) {
+                    $argumentVariableName = $this->nodeNameResolver->getName($arg->value);
+                    if ($classMethod instanceof ClassMethod) {
+                        foreach ($classMethod->getParams() as $param) {
+                            if (! $this->nodeNameResolver->isName($param->var, $argumentVariableName)) {
+                                continue;
+                            }
+
+                            if ($param->type === null) {
+                                // docblock defined, remove it
+                                $argValueType = new MixedType();
+                                continue;
+                            }
+
+                            $paramType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+                            if ($this->typeComparator->areTypesEqual($paramType, $argValueType)) {
+                                continue;
+                                // type is matchign! keep it
+                            }
+                            // docblock defined, remove it
+                            $argValueType = new MixedType();
+                        }
+                    }
+                }
+
+                $staticTypesByArgumentPosition[$position][] = $argValueType;
             }
         }
 
