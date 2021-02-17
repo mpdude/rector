@@ -15,7 +15,7 @@ final class TypeUnwrapper
     /**
      * E.g. null|ClassType → ClassType
      */
-    public function unwrapNullableType(Type $type): Type
+    public function unwrapNullableType(UnionType $type): Type
     {
         if (! $type instanceof UnionType) {
             return $type;

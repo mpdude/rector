@@ -163,8 +163,8 @@ abstract class AbstractTagValueNode implements AttributeAwareNodeInterface, PhpD
     protected function printNestedTag(
         array $tagValueNodes,
         bool $haveFinalComma,
-        ?string $openingSpace,
-        ?string $closingSpace
+        string $openingSpace,
+        string $closingSpace
     ): string {
         $tagValueNodesAsString = $this->printTagValueNodesSeparatedByComma($tagValueNodes);
 

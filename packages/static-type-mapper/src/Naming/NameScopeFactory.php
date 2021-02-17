@@ -67,7 +67,7 @@ final class NameScopeFactory
         );
     }
 
-    public function setStaticTypeMapper(StaticTypeMapper $staticTypeMapper): void
+    public function setStaticTypeMapper(self $staticTypeMapper): void
     {
         $this->staticTypeMapper = $staticTypeMapper;
     }

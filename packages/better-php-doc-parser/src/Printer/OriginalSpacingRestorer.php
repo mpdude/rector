@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Printer;
 
 use Nette\Utils\Strings;
-use PHPStan\PhpDocParser\Ast\Node;
+use Rector\BetterPhpDocParser\Contract\PhpDocNode\AttributeAwareNodeInterface;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 
 final class OriginalSpacingRestorer
@@ -30,7 +30,7 @@ final class OriginalSpacingRestorer
      * @param mixed[] $tokens
      */
     public function restoreInOutputWithTokensStartAndEndPosition(
-        Node $node,
+        AttributeAwareNodeInterface $node,
         string $nodeOutput,
         array $tokens,
         StartAndEnd $startAndEnd

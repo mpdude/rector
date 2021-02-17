@@ -39,7 +39,7 @@ final class ParentClassLikeTypeCorrector
         $this->classReflectionTypesResolver = $classReflectionTypesResolver;
     }
 
-    public function correct(Type $type): Type
+    public function correct(TypeWithClassName $type): Type
     {
         if ($type instanceof TypeWithClassName) {
             if (! ClassExistenceStaticHelper::doesClassLikeExist($type->getClassName())) {

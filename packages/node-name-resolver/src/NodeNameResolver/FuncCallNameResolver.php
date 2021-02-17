@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NodeNameResolver\NodeNameResolver;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
@@ -22,10 +21,8 @@ final class FuncCallNameResolver implements NodeNameResolverInterface
     /**
      * If some function is namespaced, it will be used over global one.
      * But only if it really exists.
-     *
-     * @param FuncCall $node
      */
-    public function resolve(Node $node): ?string
+    public function resolve(\PhpParser\Node\Expr\FuncCall $node): ?string
     {
         if ($node->name instanceof Expr) {
             return null;

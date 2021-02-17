@@ -176,7 +176,7 @@ final class NodeTypeResolver
      * @deprecated
      * Use @see NodeTypeResolver::resolve() instead
      */
-    public function getStaticType(Node $node): Type
+    public function getStaticType(\PhpParser\Node\Expr $node): Type
     {
         if ($this->isArrayExpr($node)) {
             /** @var Expr $node */

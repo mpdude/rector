@@ -47,7 +47,7 @@ final class IndexPhpDocNodeFactory
      * @param mixed[]|null $indexes
      * @return IndexTagValueNode[]
      */
-    public function createIndexTagValueNodes(?array $indexes, string $annotationContent): array
+    public function createIndexTagValueNodes(array $indexes, string $annotationContent): array
     {
         if ($indexes === null) {
             return [];

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\PostRector\Collector;
 
 use PhpParser\Node;
-use PHPStan\Type\ObjectType;
 use Rector\NodeTypeResolver\FileSystem\CurrentFileInfoProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
@@ -48,7 +47,7 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
     /**
      * @param FullyQualifiedObjectType|AliasedObjectType $objectType
      */
-    public function addUseImport(Node $positionNode, ObjectType $objectType): void
+    public function addUseImport(Node $positionNode, FullyQualifiedObjectType $objectType): void
     {
         /** @var SmartFileInfo|null $fileInfo */
         $fileInfo = $positionNode->getAttribute(AttributeKey::FILE_INFO);

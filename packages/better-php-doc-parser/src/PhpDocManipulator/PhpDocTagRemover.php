@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocManipulator;
 
-use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\PhpAttribute\Contract\PhpAttributableTagNodeInterface;
 
 final class PhpDocTagRemover
 {
@@ -29,7 +29,7 @@ final class PhpDocTagRemover
         }
     }
 
-    public function removeTagValueFromNode(PhpDocInfo $phpDocInfo, Node $desiredNode): void
+    public function removeTagValueFromNode(PhpDocInfo $phpDocInfo, PhpAttributableTagNodeInterface $desiredNode): void
     {
         $attributeAwarePhpDocNode = $phpDocInfo->getPhpDocNode();
 

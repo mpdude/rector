@@ -9,6 +9,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\Contract\Doctrine\DoctrineTagNodeInterface;
 use Rector\BetterPhpDocParser\Contract\PhpDocNode\SilentKeyNodeInterface;
 use Rector\BetterPhpDocParser\Utils\ArrayItemStaticHelper;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\AbstractTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Sensio\SensioRouteTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocNode\Symfony\SymfonyRouteTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\TagValueNodeConfiguration;
@@ -61,7 +62,7 @@ final class TagValueNodeConfigurationFactory
 
     public function createFromOriginalContent(
         ?string $originalContent,
-        PhpDocTagValueNode $phpDocTagValueNode
+        AbstractTagValueNode $phpDocTagValueNode
     ): TagValueNodeConfiguration {
         if ($originalContent === null) {
             return new TagValueNodeConfiguration();

@@ -219,7 +219,7 @@ final class PhpDocInfoPrinter
 
     private function printNode(
         AttributeAwareNodeInterface $attributeAwareNode,
-        ?StartAndEnd $startAndEnd = null,
+        ?\Rector\BetterPhpDocParser\ValueObject\StartAndEnd $startAndEnd = null,
         int $key = 0,
         int $nodeCount = 0
     ): string {

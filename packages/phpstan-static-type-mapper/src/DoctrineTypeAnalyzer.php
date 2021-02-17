@@ -11,12 +11,8 @@ use PHPStan\Type\UnionType;
 
 final class DoctrineTypeAnalyzer
 {
-    public function isDoctrineCollectionWithIterableUnionType(Type $type): bool
+    public function isDoctrineCollectionWithIterableUnionType(UnionType $type): bool
     {
-        if (! $type instanceof UnionType) {
-            return false;
-        }
-
         $arrayType = null;
         $hasDoctrineCollectionType = false;
         foreach ($type->getTypes() as $unionedType) {

@@ -122,7 +122,7 @@ final class ChangedFilesDetector
     /**
      * @param mixed $value
      */
-    private function saveItemWithValue(string $key, $value): void
+    private function saveItemWithValue(string $key, string $value): void
     {
         $cacheItem = $this->tagAwareAdapter->getItem($key);
         $cacheItem->set($value);

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Rector\PostRector\Collector;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
 
 final class NodesToReplaceCollector implements NodeCollectorInterface
@@ -14,7 +16,7 @@ final class NodesToReplaceCollector implements NodeCollectorInterface
      */
     private $nodesToReplace = [];
 
-    public function addReplaceNodeWithAnotherNode(Node $node, Node $replaceWith): void
+    public function addReplaceNodeWithAnotherNode(Assign $node, Expr $replaceWith): void
     {
         $this->nodesToReplace[] = [$node, $replaceWith];
     }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Printer;
 
 use Nette\Utils\Strings;
-use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
@@ -22,7 +21,7 @@ final class MultilineSpaceFormatPreserver
      */
     public const NEWLINE_WITH_SPACE_REGEX = '#\n {1,}$#s';
 
-    public function resolveCurrentPhpDocNodeText(Node $node): ?string
+    public function resolveCurrentPhpDocNodeText(AttributeAwareNodeInterface $node): ?string
     {
         if ($node instanceof PhpDocTagNode &&
             property_exists($node->value, 'description')

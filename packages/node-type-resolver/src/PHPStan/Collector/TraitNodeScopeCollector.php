@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Collector;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Variable;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\VirtualNode;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
@@ -42,7 +43,7 @@ final class TraitNodeScopeCollector
         $this->scopeByTraitNodeHash[$traitNodeHash] = $scope;
     }
 
-    public function getScopeForTraitAndNode(string $traitName, Node $node): ?Scope
+    public function getScopeForTraitAndNode(string $traitName, Variable $node): ?Scope
     {
         $traitNodeHash = $this->createHash($traitName, $node);
 

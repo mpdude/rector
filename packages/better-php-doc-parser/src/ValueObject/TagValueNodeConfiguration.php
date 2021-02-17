@@ -132,8 +132,9 @@ final class TagValueNodeConfiguration
         $this->orderedVisibleItems[] = $itemKey;
     }
 
-    public function mimic(self $tagValueNodeConfiguration): void
-    {
+    public function mimic(
+        self $tagValueNodeConfiguration
+    ): void {
         $this->isSilentKeyExplicit = $tagValueNodeConfiguration->isSilentKeyExplicit;
         $this->hasOpeningBracket = $tagValueNodeConfiguration->hasOpeningBracket;
         $this->hasClosingBracket = $tagValueNodeConfiguration->hasClosingBracket;

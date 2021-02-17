@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\Printer;
 
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
+use Rector\AttributeAwarePhpDoc\Ast\PhpDoc\AttributeAwarePhpDocNode;
 
 final class EmptyPhpDocDetector
 {
-    public function isPhpDocNodeEmpty(PhpDocNode $phpDocNode): bool
+    public function isPhpDocNodeEmpty(AttributeAwarePhpDocNode $phpDocNode): bool
     {
         if ($phpDocNode->children === []) {
             return true;

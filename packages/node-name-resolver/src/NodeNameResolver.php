@@ -94,7 +94,7 @@ final class NodeNameResolver
     /**
      * @param Node|Node[] $node
      */
-    public function isName($node, string $name): bool
+    public function isName(Node $node, ?string $name): bool
     {
         if ($node instanceof MethodCall) {
             $message = sprintf(

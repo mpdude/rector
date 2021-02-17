@@ -61,10 +61,8 @@ final class ArrayTypeMapper implements TypeMapperInterface
         return ArrayType::class;
     }
 
-    /**
-     * @param ArrayType $type
-     */
-    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\ArrayType $type): TypeNode
     {
         $itemType = $type->getItemType();
 
