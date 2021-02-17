@@ -7,15 +7,14 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\PHPStan\TypeComparator;
+use Rector\TypeDeclaration\NodeTypeAnalyzer\ParamTypeCompatibilityChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -36,10 +35,19 @@ final class AddMethodCallBasedStrictParamTypeRector extends AbstractRector
      */
     private $typeComparator;
 
-    public function __construct(TypeFactory $typeFactory, TypeComparator $typeComparator)
-    {
+    /**
+     * @var ParamTypeCompatibilityChecker
+     */
+    private $paramTypeCompatibilityChecker;
+
+    public function __construct(
+        TypeFactory $typeFactory,
+        TypeComparator $typeComparator,
+        ParamTypeCompatibilityChecker $paramTypeCompatibilityChecker
+    ) {
         $this->typeFactory = $typeFactory;
         $this->typeComparator = $typeComparator;
+        $this->paramTypeCompatibilityChecker = $paramTypeCompatibilityChecker;
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -140,32 +148,8 @@ CODE_SAMPLE
 
             foreach ($call->args as $position => $arg) {
                 $argValueType = $this->getStaticType($arg->value);
-
-                // 1. is defined in param?
-                $classMethod = $arg->getAttribute(AttributeKey::METHOD_NODE);
-                if ($arg->value instanceof Variable) {
-                    $argumentVariableName = $this->nodeNameResolver->getName($arg->value);
-                    if ($classMethod instanceof ClassMethod) {
-                        foreach ($classMethod->getParams() as $param) {
-                            if (! $this->nodeNameResolver->isName($param->var, $argumentVariableName)) {
-                                continue;
-                            }
-
-                            if ($param->type === null) {
-                                // docblock defined, remove it
-                                $argValueType = new MixedType();
-                                continue;
-                            }
-
-                            $paramType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
-                            if ($this->typeComparator->areTypesEqual($paramType, $argValueType)) {
-                                continue;
-                                // type is matchign! keep it
-                            }
-                            // docblock defined, remove it
-                            $argValueType = new MixedType();
-                        }
-                    }
+                if (! $this->paramTypeCompatibilityChecker->isCompatibleWithParamStrictTyped($arg, $argValueType)) {
+                    continue;
                 }
 
                 $staticTypesByArgumentPosition[$position][] = $argValueType;
