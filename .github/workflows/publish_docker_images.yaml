@@ -13,6 +13,8 @@ on:
 jobs:
     publish_images:
         runs-on: ubuntu-latest
+        env:
+            DOCKER_BUILDKIT: '1'
         steps:
             - uses: actions/checkout@v2
 
@@ -27,11 +29,15 @@ jobs:
                   # Use Docker `latest` tag convention
                   [ "$VERSION" == "master" ] && VERSION=latest
 
+                  echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
+                  docker pull docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache || true
+
                   # docker pull rector/rector || true
                   # docker build . --target rector --cache-from rector/rector --tag rector/rector:$VERSION
                   # docker build . --target rector-secured --cache-from rector/rector --tag rector/rector-secured:$VERSION
 
-                  docker build --target rector --build-arg PHP_VERSION=7.4 -t rector-php7.4 .
+                  docker build --cache-from=docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache --target rector --build-arg PHP_VERSION=7.4 -t rector-php7.4 .
+                  docker tag rector-php7.4 docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache && docker push docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache || true
 
 #            - name: Log into registry
 #              run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
