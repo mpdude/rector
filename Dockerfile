@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install -y \
         opcache \
         zip
 
-COPY --from=index.docker.io/library/composer:2.0.9 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.0.9 /usr/bin/composer /usr/bin/composer
 
 ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_MEMORY_LIMIT=-1 COMPOSER_NO_INTERACTION=1
 
@@ -68,7 +68,7 @@ WORKDIR "/project"
 
 FROM runtime as rector
 
-COPY --from=build-scoped /scoped /rector
+COPY --from=build /scoped /rector
 RUN chmod +x /rector/bin/rector
 
 RUN mkdir -p /tmp/opcache \
