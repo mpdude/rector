@@ -36,8 +36,7 @@ jobs:
                   # docker build . --target rector --cache-from rector/rector --tag rector/rector:$VERSION
                   # docker build . --target rector-secured --cache-from rector/rector --tag rector/rector-secured:$VERSION
 
-                  #docker build --cache-from=docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache --target rector --build-arg PHP_VERSION=7.4 -t rector-php7.4 .
-                  docker build --target rector --build-arg PHP_VERSION=7.4 -t rector-php7.4 .
+                  docker build --cache-from=docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache --target rector --build-arg PHP_VERSION=7.4 -t rector-php7.4 .
                   docker tag rector-php7.4 docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache && docker push docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache || true
 
 #            - name: Log into registry
