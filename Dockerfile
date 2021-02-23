@@ -71,9 +71,9 @@ FROM runtime as rector
 COPY --from=build /scoped /rector
 RUN chmod +x /rector/bin/rector
 
-RUN mkdir -p /tmp/opcache \
-    && /rector/bin/rector list \
-    && chmod 777 -R /tmp
+#RUN mkdir -p /tmp/opcache \
+#    && /rector/bin/rector list \
+#    && chmod 777 -R /tmp
 
 ## Used for getrector.org/demo
 FROM rector as rector-secured
