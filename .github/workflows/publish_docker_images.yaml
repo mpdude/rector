@@ -42,8 +42,8 @@ jobs:
                         --cache-from=ghcr.io/$GITHUB_REPOSITORY:build-cache \
                         --cache-to=type=registry,ref=ghcr.io/$GITHUB_REPOSITORY:build-cache,mode=max,push=true \
                         --target rector \
-                        --build-arg PHP_VERSION=7.4 -t rector-php7.4 .
-                        --push $GITHUB_REPOSITORY
+                        --push \
+                        --build-arg PHP_VERSION=7.4 -t mpdude/rector:php7.4 .
                   # docker tag rector-php7.4 docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache && docker push docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache || true
 
 #            - name: Log into registry
