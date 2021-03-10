@@ -1,6 +1,7 @@
 name: Tests
 
-on: ['push']
+on:
+    pull_request: null
 
 jobs:
     tests:
@@ -28,4 +29,4 @@ jobs:
             -   run: composer install --no-progress --ansi
                 if: "matrix.dependencies != 'lowest'"
 
-            -   run: tests/system-tests/run-tests.sh
+            -   run: vendor/bin/phpunit
